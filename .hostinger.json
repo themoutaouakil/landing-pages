@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd entree-express && npm install && npm run build",
+  "outputDirectory": "entree-express/build",
+  "installCommand": "cd entree-express && npm install",
+  "framework": "vite",
+  "rootDirectory": "entree-express"
+}
+

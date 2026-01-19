@@ -9,31 +9,40 @@ This repository contains all landing pages used by IMIGO Immigration CRM. Each l
 
 ## 🚀 Deployment on Hostinger
 
-### For Entrée Express Landing Page:
+### ⚠️ Important: Root Directory Configuration
 
-1. **Navigate to the landing page directory:**
+**If Hostinger shows "No output directory found after build":**
+
+Hostinger needs to know:
+1. **Root Directory:** `entree-express` (the folder containing package.json)
+2. **Output Directory:** `build` (relative to root directory)
+
+### Configuration Steps:
+
+1. **In Hostinger Dashboard:**
+   - Go to **Deployment Settings**
+   - Set **Root Directory** to: `entree-express`
+   - Set **Output Directory** to: `build`
+   - Set **Build Command** to: `npm run build`
+   - Set **Install Command** to: `npm install`
+   - Set **Framework** to: `Vite` or `Other`
+
+2. **Alternative: Use Build Script**
+   - Set **Build Command** to: `bash build.sh`
+   - This script handles directory navigation automatically
+
+### Manual Deployment (If Automatic Fails):
+
+1. **Build locally:**
    ```bash
    cd entree-express
-   ```
-
-2. **Install dependencies:**
-   ```bash
    npm install
-   ```
-
-3. **Build for production:**
-   ```bash
    npm run build
    ```
 
-4. **Upload to Hostinger:**
-   - Upload the contents of the `dist/` folder to your Hostinger hosting
-   - Make sure `index.html` is in the root directory of your hosting
-   - Set the document root to the folder containing `index.html`
-
-5. **Configure Hostinger:**
-   - Enable static file serving
-   - Set up your domain/subdomain to point to the uploaded files
+2. **Upload to Hostinger:**
+   - Upload the contents of `entree-express/build/` folder
+   - Make sure `index.html` is in the root of your hosting directory
 
 ## 📝 Notes
 
@@ -59,8 +68,14 @@ npm run dev  # Start development server
 npm run build  # Build for production
 ```
 
-## ⚠️ Important
+## ⚠️ Troubleshooting
 
-- The landing pages embed forms from the CRM via iframe
-- The CRM must be accessible at `https://team.imigoimmigration.com` for forms to work
-- UTM parameters are automatically passed from the landing page URL to the form iframe
+See `entree-express/HOSTINGER-DEPLOY.md` for detailed troubleshooting steps.
+
+## 🔧 Build Script
+
+A `build.sh` script is provided at the repository root for Hostinger compatibility. It:
+- Navigates to the correct directory
+- Installs dependencies
+- Builds the application
+- Verifies the build output
