@@ -21,9 +21,23 @@ npm run dev
 npm run build
 ```
 
-The built files will be in the `dist/` directory, ready for deployment.
+The built files will be in the `build/` directory (changed from `dist/` for Hostinger compatibility), ready for deployment.
 
 ## 📦 Deployment on Hostinger
+
+### Option 1: Automatic Deployment (Recommended)
+
+1. **Connect your GitHub repository to Hostinger**
+   - Go to Hostinger's deployment settings
+   - Connect the `landing-pages` repository
+   - Select the `entree-express` folder as the root directory
+
+2. **Hostinger will automatically:**
+   - Run `npm install`
+   - Run `npm run build`
+   - Deploy the `build/` folder
+
+### Option 2: Manual Deployment
 
 1. **Build the project:**
    ```bash
@@ -31,7 +45,7 @@ The built files will be in the `dist/` directory, ready for deployment.
    ```
 
 2. **Upload to Hostinger:**
-   - Upload the contents of the `dist/` folder to your Hostinger hosting
+   - Upload the contents of the `build/` folder to your Hostinger hosting
    - Make sure `index.html` is in the root directory
 
 3. **Configure Hostinger:**
@@ -71,3 +85,12 @@ Edit `LandingPageWithForm.jsx` to customize:
 - The form is embedded from the CRM, so it requires the CRM to be accessible
 - UTM parameters are automatically passed to the form iframe
 - All styling is inline for easy customization
+- **Output directory is `build/` (not `dist/`) for Hostinger compatibility**
+
+## 🔧 Troubleshooting
+
+If Hostinger shows "No output directory found after build":
+1. Make sure the build completed successfully
+2. Check that the `build/` folder exists after running `npm run build`
+3. Verify the `.hostinger.json` file is present
+4. Try setting the output directory manually in Hostinger settings to `build`

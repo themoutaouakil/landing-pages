@@ -5,10 +5,10 @@ export default defineConfig({
   plugins: [react()],
   base: '/',
   build: {
-    outDir: 'dist',
+    outDir: 'build', // Changed from 'dist' to 'build' for Hostinger compatibility
     assetsDir: 'assets',
     sourcemap: false,
-    minify: 'esbuild'
+    minify: 'esbuild',
+    emptyOutDir: true
   }
 })
-
