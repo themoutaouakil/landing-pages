@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
-import PublicForm from './PublicForm'
-import ImigoAmbassadorLandingPage from './ImigoAmbassadorLandingPage'
 
 export default function LandingPageWithForm() {
   const { formId } = useParams()
@@ -12,24 +10,16 @@ export default function LandingPageWithForm() {
   // Get form ID from URL param or query string
   const actualFormId = formId || searchParams.get('form') || 'entree-express'
   
-  const isAmbassador = actualFormId === 'ambassador'
-
   // Handle window resize
   useEffect(() => {
-    if (isAmbassador) return
     const handleResize = () => {
       setWindowWidth(window.innerWidth)
     }
     
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [isAmbassador])
+  }, [])
 
-  // If it's the ambassador form, render the ambassador landing page
-  if (isAmbassador) {
-    return <ImigoAmbassadorLandingPage />
-  }
-  
   // Helper functions for responsive values
   const isMobile = windowWidth <= 480
   const isTablet = windowWidth <= 768
@@ -37,6 +27,26 @@ export default function LandingPageWithForm() {
   const getSectionPadding = () => isMobile ? '40px 16px' : isTablet ? '60px 20px' : '100px 40px'
   const getHeroPadding = () => isMobile ? '32px 16px' : isTablet ? '40px 20px' : '80px 40px'
   const getFontSize = (desktop, tablet, mobile) => isMobile ? mobile : isTablet ? tablet : desktop
+
+  // Build iframe URL with UTM parameters
+  const buildFormUrl = () => {
+    const baseUrl = 'https://team.imigoimmigration.com/form/entree-express'
+    const params = new URLSearchParams()
+    
+    // Pass all UTM parameters from current URL to iframe
+    const utmSource = searchParams.get('utm_source')
+    const utmMedium = searchParams.get('utm_medium')
+    const utmCampaign = searchParams.get('utm_campaign')
+    const agent = searchParams.get('agent')
+    
+    if (utmSource) params.set('utm_source', utmSource)
+    if (utmMedium) params.set('utm_medium', utmMedium)
+    if (utmCampaign) params.set('utm_campaign', utmCampaign)
+    if (agent) params.set('agent', agent)
+    
+    const queryString = params.toString()
+    return queryString ? `${baseUrl}?${queryString}` : baseUrl
+  }
 
   return (
     <div style={{
@@ -430,7 +440,7 @@ export default function LandingPageWithForm() {
         </div>
       </section>
 
-      {/* Form Section - Moved right after Hero */}
+      {/* Form Section - Embedded via iframe */}
       <section id="formulaire" style={{
         padding: getSectionPadding(),
         background: 'linear-gradient(135deg, #1D2133 0%, #2d3548 100%)',
@@ -454,27 +464,31 @@ export default function LandingPageWithForm() {
             </p>
           </div>
 
-          {/* Integrated Form - Direct component, NOT iframe */}
+          {/* Embedded Form via iframe */}
           <div style={{
             background: 'white',
             borderRadius: '20px',
             boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-            overflow: 'visible',
-            minHeight: 'auto',
+            overflow: 'hidden',
+            minHeight: '600px',
             height: 'auto'
           }}>
-            <PublicForm 
-              formIdOverride={actualFormId} 
-              embedded={true}
-              utmSource={searchParams.get('utm_source') || ''}
-              utmMedium={searchParams.get('utm_medium') || ''}
-              utmCampaign={searchParams.get('utm_campaign') || ''}
-              agent={searchParams.get('agent') || ''}
+            <iframe
+              src={buildFormUrl()}
+              style={{
+                width: '100%',
+                minHeight: '600px',
+                border: 'none',
+                display: 'block'
+              }}
+              title="Formulaire d'évaluation"
+              allow="clipboard-read; clipboard-write"
             />
           </div>
         </div>
       </section>
 
+      {/* Rest of the sections - Stats, Benefits, Process, Services, Footer */}
       {/* Stats Section */}
       <section style={{
         background: '#1D2133',
@@ -540,62 +554,32 @@ export default function LandingPageWithForm() {
               {
                 title: 'Système de santé universel',
                 description: 'Accès gratuit aux soins de santé pour tous les résidents permanents et citoyens',
-                icon: (
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E84E2B" strokeWidth="2">
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                  </svg>
-                )
+                icon: '🏥'
               },
               {
                 title: 'Économie stable et prospère',
                 description: 'Marché du travail dynamique avec des salaires compétitifs et de nombreuses opportunités',
-                icon: (
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E84E2B" strokeWidth="2">
-                    <line x1="12" y1="1" x2="12" y2="23"/>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                  </svg>
-                )
+                icon: '💰'
               },
               {
                 title: 'Éducation de qualité',
                 description: 'Système éducatif reconnu mondialement, études gratuites pour les enfants',
-                icon: (
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E84E2B" strokeWidth="2">
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                  </svg>
-                )
+                icon: '🎓'
               },
               {
                 title: 'Multiculturalisme',
                 description: 'Société inclusive qui célèbre la diversité culturelle et religieuse',
-                icon: (
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E84E2B" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="2" y1="12" x2="22" y2="12"/>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                  </svg>
-                )
+                icon: '🌍'
               },
               {
                 title: 'Sécurité et qualité de vie',
                 description: 'Classé parmi les pays les plus sûrs au monde avec un environnement paisible',
-                icon: (
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E84E2B" strokeWidth="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  </svg>
-                )
+                icon: '🛡️'
               },
               {
                 title: 'Nature spectaculaire',
                 description: 'Paysages à couper le souffle, parcs nationaux et espaces verts infinis',
-                icon: (
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E84E2B" strokeWidth="2">
-                    <path d="M17 8l4-4M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6"/>
-                    <circle cx="9" cy="9" r="2"/>
-                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
-                  </svg>
-                )
+                icon: '🏔️'
               }
             ].map((benefit, idx) => (
               <div key={idx} className="card-hover" style={{
@@ -605,7 +589,7 @@ export default function LandingPageWithForm() {
                 borderRadius: '16px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
               }}>
-                <div style={{ marginBottom: '20px' }}>
+                <div style={{ marginBottom: '20px', fontSize: '48px' }}>
                   {benefit.icon}
                 </div>
                 <h3 style={{ 
@@ -802,9 +786,7 @@ export default function LandingPageWithForm() {
                     alignItems: 'center',
                     gap: '12px'
                   }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="3">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
+                    <span style={{ color: '#10b981', fontSize: '20px' }}>✓</span>
                     {service}
                   </li>
                 ))}
@@ -842,9 +824,7 @@ export default function LandingPageWithForm() {
                     alignItems: 'center',
                     gap: '12px'
                   }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="3">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
+                    <span style={{ color: '#10b981', fontSize: '20px' }}>✓</span>
                     {guarantee}
                   </li>
                 ))}
@@ -913,4 +893,3 @@ export default function LandingPageWithForm() {
     </div>
   )
 }
-

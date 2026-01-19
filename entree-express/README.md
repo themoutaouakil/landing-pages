@@ -2,37 +2,72 @@
 
 ## 📄 Description
 
-Full-featured landing page for the Express Entry immigration program. Includes:
-- Hero section with program overview
-- Benefits section
-- Process steps (6 steps)
-- Services section
-- Embedded form for prospect evaluation
+Standalone landing page for the Express Entry immigration program. This is a deployable React application that can be hosted on Hostinger or any static hosting service.
 
-## 🔗 Live URL
+## 🚀 Quick Start
 
-`https://team.imigoimmigration.com/landing/entree-express`
+### Install Dependencies
+```bash
+npm install
+```
 
-## 📝 Usage
+### Development
+```bash
+npm run dev
+```
 
-This component is used in the CRM's routing system. It accepts:
-- `formId` parameter (defaults to 'entree-express')
-- UTM parameters: `utm_source`, `utm_medium`, `utm_campaign`, `agent`
+### Build for Production
+```bash
+npm run build
+```
 
-## 🎨 Features
+The built files will be in the `dist/` directory, ready for deployment.
+
+## 📦 Deployment on Hostinger
+
+1. **Build the project:**
+   ```bash
+   npm run build
+   ```
+
+2. **Upload to Hostinger:**
+   - Upload the contents of the `dist/` folder to your Hostinger hosting
+   - Make sure `index.html` is in the root directory
+
+3. **Configure Hostinger:**
+   - Set the document root to the folder containing `index.html`
+   - Enable static file serving
+
+## 🔗 Form Integration
+
+The form is embedded via iframe from the CRM:
+- **Form URL:** `https://team.imigoimmigration.com/form/entree-express`
+- **UTM Parameters:** Automatically passed from the landing page URL to the iframe
+
+## 📝 Features
 
 - Fully responsive (mobile, tablet, desktop)
-- Embedded form (PublicForm component)
+- Embedded form via iframe (from CRM)
 - UTM parameter tracking
 - Agent assignment support
+- SEO optimized
+
+## 🎨 Customization
+
+Edit `LandingPageWithForm.jsx` to customize:
+- Content sections
+- Colors and styling
+- Form iframe URL
+- Footer information
 
 ## 📦 Dependencies
 
-- React Router (`useParams`, `useSearchParams`)
-- PublicForm component (from CRM)
-- CRM styling and infrastructure
+- React 18.2.0
+- React Router DOM 6.20.0
+- Vite 5.0.8
 
-## 🚀 Deployment
+## ⚠️ Notes
 
-This page is deployed as part of the main CRM application. For standalone deployment, use the iframe embed code from the CRM's Forms section.
-
+- The form is embedded from the CRM, so it requires the CRM to be accessible
+- UTM parameters are automatically passed to the form iframe
+- All styling is inline for easy customization
