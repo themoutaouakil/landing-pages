@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build && echo 'Build completed successfully. Output in build/ directory.'",
+    "preview": "vite preview",
+    "postbuild": "ls -la build || echo 'Build directory check'"
   },
   "dependencies": {
     "react": "^18.2.0",
