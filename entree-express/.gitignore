@@ -1,8 +1,9 @@
 node_modules
-dist
 .DS_Store
 .env
 .env.local
 .env.production
 .env.development
 
+# Note: 'build' directory is NOT ignored so Hostinger can find it
+# 'dist' is kept for backwards compatibility but not used
